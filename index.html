@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DropCurve | Indian Resale Intelligence Engine</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111726;
+      --card-border: #1f293d;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --cyan: #22d3ee;
+      --fuchsia: #d946ef;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 24px 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 1040px;
+      width: 100%;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      background: linear-gradient(135deg, var(--cyan), var(--fuchsia));
+      color: #000;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .brand-title {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, var(--cyan), var(--fuchsia), var(--amber));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge {
+      font-size: 10px;
+      font-weight: 800;
+      background: rgba(34, 211, 238, 0.1);
+      color: var(--cyan);
+      border: 1px solid rgba(34, 211, 238, 0.3);
+      padding: 2px 8px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .tagline {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .mode-switch {
+      display: flex;
+      background: var(--card-bg);
+      padding: 4px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+    }
+
+    .mode-btn {
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+
+    .mode-btn.active-buyer {
+      background: var(--cyan);
+      color: #000;
+      box-shadow: 0 0 16px rgba(34, 211, 238, 0.3);
+    }
+
+    .mode-btn.active-seller {
+      background: var(--fuchsia);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(217, 70, 239, 0.3);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .cat-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .cat-tab {
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 12px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .cat-tab.active {
+      background: rgba(34, 211, 238, 0.1);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    input[type="number"], select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="number"]:focus, select:focus {
+      border-color: var(--cyan);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--cyan);
+      margin-top: 8px;
+      cursor: pointer;
+    }
+
+    .tier-pills {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .tier-pill {
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 4px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .tier-pill.active {
+      background: rgba(253, 224, 71, 0.1);
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    .checkbox-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 480px) {
+      .checkbox-container { grid-template-columns: 1fr; }
+    }
+
+    .check-box {
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .price-box {
+      padding: 16px;
+      border-radius: 14px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .price-fair { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--emerald); color: var(--emerald); }
+    .price-list { background: rgba(245, 158, 11, 0.1); border: 1px solid var(--amber); color: var(--amber); }
+    .price-instant { background: #161e2e; border: 1px solid var(--card-border); color: var(--text-muted); }
+
+    .price-title { font-size: 11px; font-weight: 800; text-transform: uppercase; }
+    .price-sub { font-size: 11px; opacity: 0.8; font-weight: 500; margin-top: 2px; }
+    .price-val { font-size: 22px; font-weight: 900; }
+
+    .verdict-box {
+      padding: 16px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+    }
+
+    .steal { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--emerald); color: var(--emerald); }
+    .ripoff { background: rgba(244, 63, 94, 0.1); border: 1px solid var(--rose); color: var(--rose); }
+    .fair { background: rgba(34, 211, 238, 0.1); border: 1px solid var(--cyan); color: var(--cyan); }
+    .warn { background: rgba(245, 158, 11, 0.1); border: 1px solid var(--amber); color: var(--amber); }
+
+    .script-box {
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .copy-btn {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      background: var(--cyan);
+      color: #000;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .safety-alert {
+      background: rgba(244, 63, 94, 0.08);
+      border: 1px solid rgba(244, 63, 94, 0.25);
+      color: var(--rose);
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-top: 16px;
+      line-height: 1.4;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="brand-wrap">
+      <div class="brand-icon">📉</div>
+      <div>
+        <div>
+          <span class="brand-title">DropCurve</span>
+          <span class="badge">IND v2026</span>
+        </div>
+        <div class="tagline">Real Street Resale Rates. Zero Lowballers.</div>
+      </div>
+    </div>
+    <div class="mode-switch">
+      <button id="mode-buyer" class="mode-btn active-buyer" onclick="switchMode('buyer')">🔍 Buyer Radar</button>
+      <button id="mode-seller" class="mode-btn" onclick="switchMode('seller')">🏷️ Seller Mode</button>
+    </div>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <div class="cat-tabs">
+        <div id="tab-smartphones" class="cat-tab active" onclick="switchCat('smartphones')">📱 Phones</div>
+        <div id="tab-vehicles" class="cat-tab" onclick="switchCat('vehicles')">🚗 Vehicles</div>
+        <div id="tab-laptops" class="cat-tab" onclick="switchCat('laptops')">💻 Laptops</div>
+      </div>
+
+      <div id="buyer-ask-group" class="input-group">
+        <label style="color:var(--cyan);">Seller's Asking Price on OLX / FB (₹)</label>
+        <input type="number" id="sellerPrice" value="42000" oninput="calc()">
+      </div>
+
+      <div class="input-group">
+        <label>Original Invoice Price (₹)</label>
+        <input type="number" id="origPrice" value="65000" oninput="calc()">
+      </div>
+
+      <div class="input-group">
+        <label id="age-lbl"><span>Item Age</span><span>18 Months (1.5 Yrs)</span></label>
+        <input type="range" id="ageMonths" min="1" max="72" value="18" oninput="calc()">
+      </div>
+
+      <div id="diag-smartphones">
+        <label><span>Brand / Tier</span></label>
+        <div class="tier-pills">
+          <div id="tier-apple" class="tier-pill active" onclick="switchTier('apple')">iPhone</div>
+          <div id="tier-flagship" class="tier-pill" onclick="switchTier('flagship')">Galaxy S/Pixel</div>
+          <div id="tier-budget" class="tier-pill" onclick="switchTier('budget')">Budget Android</div>
+        </div>
+
+        <div id="battery-sec" class="input-group">
+          <label id="bat-lbl"><span>Battery Health</span><span>84%</span></label>
+          <input type="range" id="batHealth" min="65" max="100" value="84" oninput="calc()">
+        </div>
+
+        <div class="input-group">
+          <label><span>Display State</span></label>
+          <select id="screenCond" onchange="calc()">
+            <option value="flawless">Flawless (Original OEM Screen)</option>
+            <option value="minor">Minor Micro-Scratches</option>
+            <option value="duplicate">Replaced Screen (Duplicate / Local)</option>
+            <option value="cracked">Cracked / Damaged Display</option>
+          </select>
+        </div>
+
+        <div class="checkbox-container">
+          <label class="check-box"><input type="checkbox" id="hasBox" checked onchange="calc()"> Bill & Box Available</label>
+          <label class="check-box" style="color:var(--rose);"><input type="checkbox" id="hasGreen" onchange="calc()"> AMOLED Green Line</label>
+        </div>
+      </div>
+
+      <div id="diag-vehicles" class="hidden">
+        <label><span>Category</span></label>
+        <div class="tier-pills">
+          <div id="vtier-maruti" class="tier-pill active" onclick="switchVTier('maruti')">Maruti / Toyota</div>
+          <div id="vtier-tata" class="tier-pill" onclick="switchVTier('tata')">Tata / Mahindra</div>
+          <div id="vtier-2w" class="tier-pill" onclick="switchVTier('2w')">Activa / Splendor</div>
+        </div>
+        <div class="input-group">
+          <label><span>Odometer Reading (KM)</span></label>
+          <input type="number" id="odoKm" value="25000" oninput="calc()">
+        </div>
+      </div>
+
+      <div id="diag-laptops" class="hidden">
+        <label><span>Machine Tier</span></label>
+        <div class="tier-pills">
+          <div id="ltier-mac" class="tier-pill active" onclick="switchLTier('mac')">MacBook (M-Series)</div>
+          <div id="ltier-gaming" class="tier-pill" onclick="switchLTier('gaming')">Gaming Laptop</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div id="buyer-res">
+        <div id="verdict" class="verdict-box fair">
+          <div style="font-size:11px; font-weight:800; text-transform:uppercase;">DropCurve Radar Verdict</div>
+          <div id="verdict-title" style="font-size:20px; font-weight:900; margin-top:4px;">Fair Market Deal</div>
+          <div id="verdict-sub" style="font-size:11px; margin-top:4px; opacity:0.9;">Priced accurately to current street rates.</div>
+        </div>
+
+        <div class="price-box price-fair">
+          <div>
+            <div class="price-title">🎯 Fair Market Value</div>
+            <div class="price-sub">Algorithmic street anchor</div>
+          </div>
+          <div id="fair-val-b" class="price-val">₹0</div>
+        </div>
+
+        <div class="price-box price-list">
+          <div>
+            <div class="price-title">⚡ Max Safe Offer Cap</div>
+            <div class="price-sub">Walk away if seller demands more</div>
+          </div>
+          <div id="max-offer-val" class="price-val">₹0</div>
+        </div>
+      </div>
+
+      <div id="seller-res" class="hidden">
+        <div class="price-box price-fair">
+          <div>
+            <div class="price-title">🎯 Target Settlement Price</div>
+            <div class="price-sub">Actual cash walk-away target</div>
+          </div>
+          <div id="fair-val-s" class="price-val">₹0</div>
+        </div>
+
+        <div class="price-box price-list">
+          <div>
+            <div class="price-title">🛡️ OLX / FB Listing Quote</div>
+            <div class="price-sub">Includes 12% bargaining cushion</div>
+          </div>
+          <div id="list-val" class="price-val">₹0</div>
+        </div>
+
+        <div class="price-box price-instant">
+          <div>
+            <div class="price-title">⚡ Instant Cashify Floor</div>
+            <div class="price-sub">Doorstep immediate payout</div>
+          </div>
+          <div id="inst-val" class="price-val">₹0</div>
+        </div>
+      </div>
+
+      <div class="script-box">
+        <button class="copy-btn" onclick="copyText()">Copy</button>
+        <div id="script-text">Calculating...</div>
+      </div>
+
+      <div class="safety-alert">
+        ⚠️ <strong>Safety Rule:</strong> Scanning a UPI QR code <u>never</u> receives money. Block buyers claiming to be military personnel asking for courier pickup.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let mode = 'buyer';
+  let cat = 'smartphones';
+  let phoneTier = 'apple';
+  let vTier = 'maruti';
+  let lTier = 'mac';
+
+  function switchMode(m) {
+    mode = m;
+    document.getElementById('mode-buyer').className = m === 'buyer' ? 'mode-btn active-buyer' : 'mode-btn';
+    document.getElementById('mode-seller').className = m === 'seller' ? 'mode-btn active-seller' : 'mode-btn';
+    document.getElementById('buyer-ask-group').classList.toggle('hidden', m === 'seller');
+    document.getElementById('buyer-res').classList.toggle('hidden', m === 'seller');
+    document.getElementById('seller-res').classList.toggle('hidden', m === 'buyer');
+    calc();
+  }
+
+  function switchCat(c) {
+    cat = c;
+    ['smartphones', 'vehicles', 'laptops'].forEach(item => {
+      document.getElementById('tab-' + item).classList.toggle('active', item === c);
+      document.getElementById('diag-' + item).classList.toggle('hidden', item !== c);
+    });
+    calc();
+  }
+
+  function switchTier(t) {
+    phoneTier = t;
+    ['apple', 'flagship', 'budget'].forEach(item => {
+      document.getElementById('tier-' + item).classList.toggle('active', item === t);
+    });
+    document.getElementById('battery-sec').classList.toggle('hidden', t !== 'apple');
+    calc();
+  }
+
+  function switchVTier(t) {
+    vTier = t;
+    ['maruti', 'tata', '2w'].forEach(item => {
+      document.getElementById('vtier-' + item).classList.toggle('active', item === t);
+    });
+    calc();
+  }
+
+  function switchLTier(t) {
+    lTier = t;
+    ['mac', 'gaming'].forEach(item => {
+      document.getElementById('ltier-' + item).classList.toggle('active', item === t);
+    });
+    calc();
+  }
+
+  function calc() {
+    const orig = Number(document.getElementById('origPrice').value) || 65000;
+    const age = Number(document.getElementById('ageMonths').value) || 18;
+    const ask = Number(document.getElementById('sellerPrice').value) || 42000;
+    const ageYears = age / 12;
+
+    document.getElementById('age-lbl').innerHTML = `<span>Item Age</span><span>${age} Months (${ageYears.toFixed(1)} Yrs)</span>`;
+
+    let ret = 1.0;
+    let mult = 1.0;
+
+    if (cat === 'smartphones') {
+      const bat = Number(document.getElementById('batHealth').value);
+      document.getElementById('bat-lbl').innerHTML = `<span>Battery Health</span><span>${bat}%</span>`;
+
+      if (phoneTier === 'apple') {
+        ret = 0.84 * Math.exp(-0.18 * Math.max(0, ageYears - 0.5));
+        if (bat < 80) mult *= 0.86;
+      } else if (phoneTier === 'flagship') {
+        ret = 0.68 * Math.exp(-0.25 * Math.max(0, ageYears - 0.5));
+      } else {
+        ret = 0.55 * Math.pow(0.78, Math.max(0, ageYears - 0.5));
+      }
+
+      const scr = document.getElementById('screenCond').value;
+      if (scr === 'minor') mult *= 0.88;
+      if (scr === 'duplicate') mult *= 0.55;
+      if (scr === 'cracked') mult *= 0.40;
+      if (document.getElementById('hasGreen').checked) mult *= 0.45;
+      if (!document.getElementById('hasBox').checked) mult *= 0.88;
+
+    } else if (cat === 'vehicles') {
+      ret = Math.max(0.20, 0.85 - (ageYears * 0.09));
+      const km = Number(document.getElementById('odoKm').value) || 25000;
+      if (km > ageYears * 10000) mult *= 0.90;
+    } else {
+      ret = lTier === 'mac' ? Math.max(0.30, 0.82 - (ageYears * 0.10)) : Math.max(0.18, 0.65 - (ageYears * 0.14));
+    }
+
+    const fair = Math.max(1000, Math.round((orig * ret * mult) / 100) * 100);
+    const maxOffer = Math.round((fair * 0.95) / 100) * 100;
+    const listing = Math.round((fair * 1.13) / 100) * 100;
+    const instant = Math.round((fair * 0.72) / 100) * 100;
+
+    document.getElementById('fair-val-b').innerText = '₹' + fair.toLocaleString('en-IN');
+    document.getElementById('max-offer-val').innerText = '₹' + maxOffer.toLocaleString('en-IN');
+    document.getElementById('fair-val-s').innerText = '₹' + fair.toLocaleString('en-IN');
+    document.getElementById('list-val').innerText = '₹' + listing.toLocaleString('en-IN');
+    document.getElementById('inst-val').innerText = '₹' + instant.toLocaleString('en-IN');
+
+    // Verdict Calculation
+    const diff = ask - fair;
+    const diffPct = Math.round((diff / fair) * 100);
+    const vBox = document.getElementById('verdict');
+    const vTitle = document.getElementById('verdict-title');
+    const vSub = document.getElementById('verdict-sub');
+
+    if (diffPct < -10) {
+      vBox.className = 'verdict-box steal';
+      vTitle.innerText = '⚡ STEAL DEAL (Check Thoroughly)';
+      vSub.innerText = `Priced ₹${Math.abs(diff).toLocaleString('en-IN')} below fair market value.`;
+    } else if (diffPct > 15) {
+      vBox.className = 'verdict-box ripoff';
+      vTitle.innerText = '🚨 OVERPRICED (Total Rip-Off)';
+      vSub.innerText = `Seller asking ₹${diff.toLocaleString('en-IN')} (+${diffPct}%) above street benchmark.`;
+    } else if (diffPct > 5) {
+      vBox.className = 'verdict-box warn';
+      vTitle.innerText = '⚠️ SLIGHTLY OVERPRICED';
+      vSub.innerText = `Seller asking ₹${diff.toLocaleString('en-IN')} above fair value. Counter-offer needed.`;
+    } else {
+      vBox.className = 'verdict-box fair';
+      vTitle.innerText = 'Fair Market Deal';
+      vSub.innerText = `Priced within reasonable market variance.`;
+    }
+
+    // Dynamic Script Generation
+    document.getElementById('script-text').innerText = mode === 'buyer'
+      ? `Hi! DropCurve benchmark ceiling for this model is ₹${fair.toLocaleString('en-IN')}. I can offer ₹${maxOffer.toLocaleString('en-IN')} and complete the pickup today with immediate IMPS.`
+      : `Hey! Thanks for reaching out. The price is benchmarked against DropCurve market analytics. Can settle at ₹${fair.toLocaleString('en-IN')} for pickup today.`;
+  }
+
+  function copyText() {
+    navigator.clipboard.writeText(document.getElementById('script-text').innerText);
+    const btn = document.querySelector('.copy-btn');
+    btn.innerText = '✓ Copied';
+    setTimeout(() => { btn.innerText = 'Copy'; }, 1500);
+  }
+
+  // Run on startup
+  calc();
+</script>
+</body>
+</html>
