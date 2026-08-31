@@ -52,7 +52,7 @@ Since DropCurve is built without a build step, running it locally or deploying t
 ### Run Locally
 ```bash
 # Clone the repository
-git clone [https://github.com/](https://github.com/)<YOUR_USERNAME>/dropcurve.git
+git clone [https://github.com/](https://github.com/)<palzerslab>/dropcurve.git
 
 # Navigate to the folder and open index.html in any browser
 cd dropcurve
